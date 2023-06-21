@@ -26,6 +26,13 @@ class Product(models.Model):
     description = models.CharField(max_length=500)
     price = models.DecimalField(decimal_places=2, max_digits=6)
     inventory = models.IntegerField()
+    collection = models.ForeignKey(
+        "Collection",
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name="products",
+    )
 
     def __str__(self):
         return str(self.title)
@@ -36,7 +43,8 @@ class Collection(models.Model):
         Product,
         blank=True,
         null=True,
-        on_delete=models.SET_NULL
+        on_delete=models.SET_NULL,
+        related_name="featured_in",
     )
 
     def __str__(self):

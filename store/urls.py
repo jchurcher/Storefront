@@ -3,5 +3,6 @@ from . import views
 
 # URLConf
 urlpatterns = [
-    path("products/", views.IndexView.as_view(), name="index_products"),
+    path("products/", views.ProductIndexView.as_view(), name="index_products"),
+    path("collections/", views.CollectionIndexView.as_view(), name="index_collections"),
 ]
