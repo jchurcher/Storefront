@@ -1,4 +1,4 @@
-<form action="{% url 'polls:vote' question.id %}" method="post">
+{% comment %} <form action="{% url 'polls:vote' question.id %}" method="post">
     {% csrf_token %}
     <fieldset>
         <legend><h1>{{ question.question_text }}</h1></legend>
@@ -9,4 +9,22 @@
         {% endfor %}
     </fieldset>
     <input type="submit" value="Vote">
-    </form>
+    </form> {% endcomment %}
+
+<!DOCTYPE html>
+{% block content %}
+    <h2>{{model_name}}</h2>
+
+    {% if object %}
+        {% for key,value in object_dict.items %}
+            {% if key == "title" %}
+                <h2>{{ value }}</h2>
+            {% else %}
+                <p>{{ key }} : {{ value }}</p>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <p>This product does not exist.</p>
+    {% endif %}
+    
+{% endblock %}
