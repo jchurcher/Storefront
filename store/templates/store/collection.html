@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+{% extends 'store/index.html' %}
+{% block head %}
+    <h2>{{model_name}}</h2>
+
+    {% if object %}
+        {% for key,value in object_dict.items %}
+            {% if key == "title" %}
+                <h2>{{ value }}</h2>
+            {% else %}
+                <p>{{ key }} : {{ value }}</p>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <p>This product does not exist.</p>
+    {% endif %}
+    
+{% endblock head %}

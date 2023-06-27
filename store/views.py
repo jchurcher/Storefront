@@ -1,3 +1,4 @@
+from django.forms.models import model_to_dict
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views import generic
@@ -28,11 +29,8 @@ class ProductDetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["object_dict"] = {"title": context["object"].title,
-                                  "description": context["object"].description,
-                                  "price": context["object"].price,
-                                  "inventory": context["object"].inventory,
-                                  "collection": context["object"].collection,}
+        obj_dict = model_to_dict(context["object"], exclude="id")
+        context["object_dict"] = obj_dict
         return context
     
 
@@ -50,10 +48,12 @@ class CollectionIndexView(generic.ListView):
     
 class CollectionDetailView(generic.DetailView):
     model = Collection
-    template_name = "store/detail.html"
+    template_name = "store/collection.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["object_dict"] = {"title": context["object"].title,
                                   "featured_product": context["object"].featured_product.title,}
+        context["object_list"] = context["object"].products.all()
+        context["detail_url"] = 'detail_products'
         return context
