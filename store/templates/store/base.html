@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    </head>
+{% block navbar %}
+    <a href="{% url 'homepage' %}" class="btn btn-info" role="button">Homepage</a>
+    <a href="{% url 'index_products' %}" class="btn btn-info" role="button">Products</a>
+    <a href="{% url 'index_collections' %}" class="btn btn-info" role="button">Collections</a>
+{% endblock navbar %}
+{% block content %}{% endblock content %}
+</html>
