@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 {% extends 'store/index.html' %}
-{% block head %}
+{% block detailhead %}
     <h2>{{model_name}}</h2>
 
     {% if object %}
@@ -14,5 +14,4 @@
     {% else %}
         <p>This product does not exist.</p>
     {% endif %}
-    
-{% endblock head %}
+{% endblock detailhead %}

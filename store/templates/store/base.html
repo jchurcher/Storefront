@@ -5,12 +5,21 @@
     {% load bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'store/style.css' %}">
 </head>
+
+<div class="d-flex justify-content-start flex-row p-2 navbar">
 {% block navbar %}
-    <a href="{% url 'homepage' %}" class="btn btn-info" role="button">Homepage</a>
-    <a href="{% url 'index_products' %}" class="btn btn-info" role="button">Products</a>
-    <a href="{% url 'index_collections' %}" class="btn btn-info" role="button">Collections</a>
+    <a href="{% url 'homepage' %}" class="flex-col pr-2 navlink btn" role="button">Homepage</a>
+    <a href="{% url 'index_products' %}" class="flex-col pr-2 navlink btn" role="button">Products</a>
+    <a href="{% url 'index_collections' %}" class="flex-col pr-2 navlink btn" role="button">Collections</a>
 {% endblock navbar %}
-{% block head %}{% endblock head %}
-{% block content %}{% endblock content %}
+</div>
+
+<div class="row p-3">
+    {% block content %}{% endblock content %}
+</div>
+
 </html>
