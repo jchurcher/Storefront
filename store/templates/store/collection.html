@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 {% extends 'store/index.html' %}
 {% block detailhead %}
-    <h2>{{model_name}}</h2>
-
     {% if object %}
         {% for key,value in object_dict.items %}
             {% if key == "title" %}

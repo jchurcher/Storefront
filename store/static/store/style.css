@@ -5,3 +5,10 @@
 .navlink {
     color: lightgray;
 }
+
+.listcol {
+    background-color: lightgray;
+    flex: 0 0 30em;
+    padding-top: 5em;
+    padding-bottom: 5em;
+}

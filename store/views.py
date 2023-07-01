@@ -25,7 +25,7 @@ class ProductIndexView(generic.ListView):
     
 class ProductDetailView(generic.DetailView):
     model = Product
-    template_name = "store/detail.html"
+    template_name = "store/product.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
