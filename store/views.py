@@ -27,11 +27,11 @@ class ProductDetailView(generic.DetailView):
     model = Product
     template_name = "store/product.html"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        obj_dict = model_to_dict(context["object"], exclude="id")
-        context["object_dict"] = obj_dict
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     obj_dict = model_to_dict(context["object"], exclude="id")
+    #     # context["object_dict"] = obj_dict
+    #     return context
     
 
     
@@ -54,6 +54,11 @@ class CollectionDetailView(generic.DetailView):
         context = super().get_context_data(**kwargs)
         context["object_dict"] = {"title": context["object"].title,
                                   "featured_product": context["object"].featured_product.title,}
-        context["object_list"] = context["object"].products.all()
+        collectionProducts = context["object"].products.all()
+        featuredProduct = context["object"].featured_product
+        context["object_list"] = self.moveItemToFront(collectionProducts, featuredProduct)
         context["detail_url"] = 'detail_products'
         return context
+    
+    def moveItemToFront(self, list, item):
+        return list.insert(0, list.pop(list.index(item)))

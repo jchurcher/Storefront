@@ -26,6 +26,7 @@ class Product(models.Model):
     description = models.CharField(max_length=500)
     price = models.DecimalField(decimal_places=2, max_digits=6)
     inventory = models.IntegerField()
+    photo = models.ImageField(upload_to='products', default='default_image.jpg')
     collection = models.ForeignKey(
         "Collection",
         blank=True,
