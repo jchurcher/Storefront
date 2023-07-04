@@ -52,13 +52,7 @@ class CollectionDetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["object_dict"] = {"title": context["object"].title,
-                                  "featured_product": context["object"].featured_product.title,}
-        collectionProducts = context["object"].products.all()
-        featuredProduct = context["object"].featured_product
-        context["object_list"] = self.moveItemToFront(collectionProducts, featuredProduct)
+        featured_product = context["object"].featured_product
+        context["object_list"] = context["object"].products.exclude(pk=featured_product.id)
         context["detail_url"] = 'detail_products'
         return context
-    
-    def moveItemToFront(self, list, item):
-        return list.insert(0, list.pop(list.index(item)))

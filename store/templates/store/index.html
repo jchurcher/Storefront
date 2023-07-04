@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 {% extends 'store/base.html' %}
 {% block content %}
-    {% block detailhead %}{% endblock detailhead %}
-    <h2>{{model_name}}</h2>
+    {% block detailhead %}
+        <h2>{{model_name}}</h2>
+    {% endblock detailhead %}
 
     {% if object_list %}
-        <div class="d-flex flex-wrap">
+        <div class="container d-flex flex-wrap">
             {% for object in object_list %}
                 <a class="listcol btn m-2" href="{% url detail_url object.id %}">{{ object.title }}</a>
             {% endfor %}
@@ -13,4 +14,5 @@
     {% else %}
         <p>No products are available.</p>
     {% endif %}
+    </div>
 {% endblock content %}

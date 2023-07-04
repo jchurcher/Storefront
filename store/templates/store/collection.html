@@ -2,14 +2,11 @@
 {% extends 'store/index.html' %}
 {% block detailhead %}
     {% if object %}
-        {% for key,value in object_dict.items %}
-            {% if key == "title" %}
-                <h2>{{ value }}</h2>
-            {% else %}
-                <p>{{ key }} : {{ value }}</p>
-            {% endif %}
-        {% endfor %}
+        <h2>{{ object.title }}</h2>
+        <div class="container d-flex flex-wrap">
+            <a class="listcol btn m-2" href="{% url detail_url object.featured_product.id %}">{{ object.featured_product.title }}</a>
+        </div>
     {% else %}
-        <p>This product does not exist.</p>
+        <p>This collection does not exist.</p>
     {% endif %}
 {% endblock detailhead %}
