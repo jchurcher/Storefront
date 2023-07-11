@@ -10,13 +10,18 @@
     <link rel="stylesheet" href="{% static 'store/style.css' %}">
 </head>
 
-<div class="d-flex justify-content-start flex-row p-2 navbar">
 {% block navbar %}
-    <a href="{% url 'homepage' %}" class="flex-col pr-2 navlink btn" role="button">Homepage</a>
-    <a href="{% url 'index_products' %}" class="flex-col pr-2 navlink btn" role="button">Products</a>
-    <a href="{% url 'index_collections' %}" class="flex-col pr-2 navlink btn" role="button">Collections</a>
-{% endblock navbar %}
+<div class="row p-2 m-0 navbar">
+    <div class="col d-flex justify-content-start">
+        <a href="{% url 'homepage' %}" class="navlink btn" role="button">Homepage</a>
+        <a href="{% url 'index_products' %}" class="navlink btn" role="button">Products</a>
+        <a href="{% url 'index_collections' %}" class="navlink btn" role="button">Collections</a>
+    </div>
+    <div class="col d-flex justify-content-end">
+        <a href="{% url 'index_cart_items' %}" class="navlink btn" role="button">Cart</a>
+    </div>
 </div>
+{% endblock navbar %}
 
 <div class="row p-3">
     {% block content %}{% endblock content %}

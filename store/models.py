@@ -54,5 +54,25 @@ class Collection(models.Model):
 class Cart(models.Model):
     created_at = models.DateTimeField()
 
+    def add_to():
+        return 0
+    
+    def delete_from():
+        return 0
+
 class CartItem(models.Model):
     quantity = models.IntegerField()
+    product = models.ForeignKey(
+        Product,
+        blank=False,
+        null=False,
+        on_delete=models.CASCADE,
+        related_name="product",
+    )
+    cart = models.ForeignKey(
+        Cart,
+        blank=False,
+        null = False,
+        on_delete=models.CASCADE,
+        related_name="cart"
+    )

@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.views import generic
 
-from store.models import Product, Collection
+from store.models import Product, Collection, Cart
 
 # Create your views here.
 
@@ -56,3 +56,8 @@ class CollectionDetailView(generic.DetailView):
         context["object_list"] = context["object"].products.exclude(pk=featured_product.id)
         context["detail_url"] = 'detail_products'
         return context
+    
+
+class CartIndexView(generic.ListView):
+    model = Cart
+    template_name = "store/cart.html"

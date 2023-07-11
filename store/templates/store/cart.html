@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+{% extends 'store/base.html' %}
+{% block content %}
+    <h2>Your Cart</h2>
+
+    {% if object_list %}
+        <div class="container d-flex flex-wrap">
+            {% for object in object_list %}
+                <a class="listcol btn m-2" href="{% url detail_url object.id %}">{{ object.title }}</a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No products are available.</p>
+    {% endif %}
+    </div>
+{% endblock content %}
