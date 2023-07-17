@@ -4,9 +4,25 @@
     <h2>Your Cart</h2>
 
     {% if object_list %}
-        <div class="container d-flex flex-wrap">
+        <div class="container">
             {% for object in object_list %}
-                <a class="listcol btn m-2" href="{% url detail_url object.id %}">{{ object.title }}</a>
+                    <div class="row">
+                        {% comment %} <div class="col-1"></div> {% endcomment %}
+                        <div class="col">
+                            <div class="listItem m-2 p-3">
+                                <div class="row">
+                                    <div class="col col-lg-auto"><img src="{{ object.product.photo.url }}" class="img-fluid" width="120", height="120"></div>
+                                    <div class="col">
+                                        <div class="row">{{ object.product.title }}</div>
+                                        <div class="row">£{{ object.product.price }} each</div>
+                                    </div>
+                                    <div class="col">Qty: {{ object.quantity }}</div>
+                                    <div class="col">Total: *do JS here*{{ object.price }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        {% comment %} <div class="col-1"></div> {% endcomment %}
+                    </div>
             {% endfor %}
         </div>
     {% else %}

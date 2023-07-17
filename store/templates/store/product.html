@@ -25,7 +25,7 @@
                     <div class="container">
                         <div class="row">
                             <div class="col"><h2>{{ object.title }}</h2></div>
-                            <div class="col"><a class="btn btn-info" role="button">Add to Cart</a></div>
+                            <div class="col"><a href="{% url 'add_to_cart' object.id %}" class="btn btn-info" role="button">Add to Cart</a></div>
                         </div>
                         <div class="row"><p>£{{ object.price }}</h2></div>
                         <div class="row"><p>{{ object.description }}</h2></div>

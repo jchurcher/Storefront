@@ -52,13 +52,7 @@ class Collection(models.Model):
         return str(self.title)
 
 class Cart(models.Model):
-    created_at = models.DateTimeField()
-
-    def add_to():
-        return 0
-    
-    def delete_from():
-        return 0
+    created_at = models.DateTimeField(auto_now_add=True, blank=True)
 
 class CartItem(models.Model):
     quantity = models.IntegerField()
@@ -67,12 +61,12 @@ class CartItem(models.Model):
         blank=False,
         null=False,
         on_delete=models.CASCADE,
-        related_name="product",
+        related_name="cart_items",
     )
     cart = models.ForeignKey(
         Cart,
         blank=False,
         null = False,
         on_delete=models.CASCADE,
-        related_name="cart"
+        related_name="cart_items"
     )
