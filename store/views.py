@@ -75,6 +75,8 @@ class CartIndexView(generic.ListView):
     def get_queryset(self) -> QuerySet[Any]:
         return self.cart.cart_items.all()
     
+
+
 def add_to_cart(request, product_id, quantity=1):
     current_product = Product.objects.get(pk=product_id)
 
@@ -98,3 +100,10 @@ def add_to_cart(request, product_id, quantity=1):
     current_cart_item.save()
 
     return redirect("detail_products", product_id)
+
+def delete_from_cart(request, product_id):
+    cart_item = CartItem.objects.get(pk = product_id)
+    
+    cart_item.delete()
+
+    return redirect("index_cart_items")
