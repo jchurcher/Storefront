@@ -54,6 +54,12 @@ class Collection(models.Model):
 class Cart(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
 
+    totalPrice = None
+
+    def getTotal(self):
+        self.totalPrice = sum([x.getTotal() for x in self.cart_items.all()])
+        return self.totalPrice
+
 class CartItem(models.Model):
     quantity = models.IntegerField()
     product = models.ForeignKey(
@@ -70,3 +76,9 @@ class CartItem(models.Model):
         on_delete=models.CASCADE,
         related_name="cart_items"
     )
+
+    totalPrice = None
+    
+    def getTotal(self):
+        self.totalPrice = self.quantity * self.product.price
+        return self.totalPrice

@@ -64,16 +64,25 @@ class CollectionDetailView(generic.DetailView):
 class CartIndexView(generic.ListView):
     model = CartItem
     template_name = "store/cart.html"
+    context_object_name = "items_in_cart"
 
     cart = None
 
     def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
         self.cart = Cart.objects.get(pk=request.session["cart"])
-        print("cart:", self.cart.id)
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self) -> QuerySet[Any]:
-        return self.cart.cart_items.all()
+        cart_items = self.cart.cart_items.all()
+        for item in cart_items:
+            item.getTotal()
+        return cart_items
+    
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["cart"] = self.cart
+        self.cart.getTotal()
+        return context
     
 
 
@@ -102,8 +111,22 @@ def add_to_cart(request, product_id, quantity=1):
     return redirect("detail_products", product_id)
 
 def delete_from_cart(request, product_id):
-    cart_item = CartItem.objects.get(pk = product_id)
+    current_cart = Cart.objects.get(pk = request.session["cart"])
+
+    cart_item = CartItem.objects.get(pk = product_id, cart=current_cart)
     
     cart_item.delete()
+
+    return redirect("index_cart_items")
+
+def change_item_quantity(request, product_id):
+    if request.method == "GET":
+        new_quantity = request.GET["quantity"]
+
+    current_cart = Cart.objects.get(pk = request.session["cart"])
+
+    cart_item = CartItem.objects.get(pk = product_id, cart=current_cart)
+    cart_item.quantity = new_quantity
+    cart_item.save()
 
     return redirect("index_cart_items")
