@@ -80,8 +80,10 @@ class CartIndexView(generic.ListView):
     
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
+
         context["cart"] = self.cart
         self.cart.getTotal()
+
         return context
     
 
@@ -108,6 +110,8 @@ def add_to_cart(request, product_id, quantity=1):
     current_cart.save()
     current_cart_item.save()
 
+    request.session["banner"] = str(quantity) + " " + current_product.title + " has been added to your cart"
+
     return redirect("detail_products", product_id)
 
 def delete_from_cart(request, product_id):
@@ -116,6 +120,8 @@ def delete_from_cart(request, product_id):
     cart_item = CartItem.objects.get(pk = product_id, cart=current_cart)
     
     cart_item.delete()
+
+    request.session["banner"] = cart_item.product.title + " has been deleted from your cart"
 
     return redirect("index_cart_items")
 
@@ -128,5 +134,7 @@ def change_item_quantity(request, product_id):
     cart_item = CartItem.objects.get(pk = product_id, cart=current_cart)
     cart_item.quantity = new_quantity
     cart_item.save()
+
+    request.session["banner"] = "Quantity of " + cart_item.product.title + " changed to " + new_quantity
 
     return redirect("index_cart_items")

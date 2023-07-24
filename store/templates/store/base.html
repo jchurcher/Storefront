@@ -23,6 +23,14 @@
 </div>
 {% endblock navbar %}
 
+{% block banner %}
+    {% comment %} {% if banner %} {% endcomment %}
+        <div class="banner">
+            {{ request.session.banner }}
+        </div>
+    {% comment %} {% endif %} {% endcomment %}
+{% endblock banner %}
+
 <div class="row p-3">
     {% block content %}{% endblock content %}
 </div>
