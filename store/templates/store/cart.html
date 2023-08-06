@@ -47,7 +47,11 @@
         <div class="listItem float-start rounded my-2 p-3">
             <div>Total: £{{ cart.totalPrice }}</div>
             <br>
-            <a href="" class="w-100 btn btn-info" role="button"><h3>Checkout</h3></a>
+            <form action="{% url 'create_order_from_cart' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="cart_id" value="{{cart.id}}">
+                <button type="submit" value="Submit" class="w-100 btn btn-info" role="button"><h3>Checkout</h3></button>
+            </form>
         </div>
     </div>
 {% endblock content %}

@@ -82,3 +82,38 @@ class CartItem(models.Model):
     def getTotal(self):
         self.totalPrice = self.quantity * self.product.price
         return self.totalPrice
+    
+class Order(models.Model):
+    placed_at = models.DateField(auto_now_add=True, blank=True)
+
+    totalPrice = None
+
+    def getTotal(self):
+        self.totalPrice = sum([x.getTotal() for x in self.cart_items.all()])
+        return self.totalPrice
+    
+    def cart_to_order(self, cart):
+        for item in cart.cart_items.all():
+            quantity = item.quantity
+            product = item.product
+            self.order_items.create(quantity=quantity, product=product)
+
+class OrderItem(models.Model):
+    quantity = models.IntegerField()
+    product = models.ForeignKey(
+        Product,
+        blank=False,
+        null=False,
+        on_delete=models.CASCADE,
+        related_name="order_items",
+    )
+    order = models.ForeignKey(
+        Order,
+        blank=False,
+        null = False,
+        on_delete=models.CASCADE,
+        related_name="order_items"
+    )
+
+    def __str__(self):
+        return self.product.title

@@ -6,7 +6,7 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.views import generic
 
-from store.models import Product, Collection, Cart, CartItem
+from store.models import Product, Collection, Cart, CartItem, Order, OrderItem
 
 # Create your views here.
 
@@ -69,7 +69,13 @@ class CartIndexView(generic.ListView):
     cart = None
 
     def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
-        self.cart = Cart.objects.get(pk=request.session["cart"])
+        if "cart" in request.session:
+            self.cart = Cart.objects.get(pk=request.session["cart"])
+        else:
+            self.cart = Cart()
+            self.cart.save()
+            request.session["cart"] = self.cart.id
+        print("cart id:", self.cart.id)
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self) -> QuerySet[Any]:
@@ -136,5 +142,22 @@ def change_item_quantity(request, product_id):
     cart_item.save()
 
     request.session["banner"] = "Quantity of " + cart_item.product.title + " changed to " + new_quantity
+
+    return redirect("index_cart_items")
+
+def create_order_from_cart(request):
+    print("hello")
+    if request.method != "POST":
+        return None
+    
+    cart = request.POST["cart_id"]
+    cart = Cart.objects.get(pk=cart)
+
+    new_order = Order()
+    new_order.save()
+    new_order.cart_to_order(cart)
+
+    cart.delete()
+    del request.session["cart"]
 
     return redirect("index_cart_items")
