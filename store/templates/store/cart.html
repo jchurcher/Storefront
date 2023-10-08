@@ -1,57 +1,77 @@
 <!DOCTYPE html>
 {% extends 'store/base.html' %}
 {% block content %}
-{% load static %}
-{% comment %} <script src="{% static 'cart.js' %}"></script> {% endcomment %}
+    {% load static %}
+    <script>
+        var cartJS = {{ cart.cartItemsToJSON }}
+    </script>
+    {% csrf_token %}
+    <script src="{% static 'store/cart.js' %}"></script>
+
     <h2>Your Cart</h2>
 
-    <div class="col-6">
-        {% if items_in_cart %}
-        <div class="container">
-            {% for cart_item in items_in_cart %}
-                    <div class="row">
-                        <div class="col">
-                            <div class="listItem float-end rounded my-2 p-3">
-                                <div class="row">
-                                {% comment %} The inside of each cart {% endcomment %}
-                                    <div class="col col-lg-auto"><img src="{{ cart_item.product.photo.url }}" class="img-cart"></div>
-                                    <div class="col">
-                                        <div class="row">{{ cart_item.product.title }}</div>
-                                        <div class="row">£{{ cart_item.product.price }} each</div>
+    <div class="row">
+        <div class="col-8">
+            {% if items_in_cart %}
+                {% for cart_item in items_in_cart %}
+                        {% comment %} Each cartitem {% endcomment %}
+                        <div class="row cartItem" id="productId_{{cart_item.product.id}}">
+                            <div class="col">
+                                <div class="listItem rounded my-2 p-3">
+                                    {% comment %} The inside of each cart item {% endcomment %}
+                                    <div class="row">
+                                        {% comment %} Other items {% endcomment %}
+                                        <div class="col">
+                                            <div class="row">
+                                                <div class="col-auto"><img src="{{ cart_item.product.photo.url }}" class="img-cart"></div>
+                                                <div class="col-auto">
+                                                    <div class="row">{{ cart_item.product.title }}</div>
+                                                    <div class="row headding">£{{ cart_item.product.price }}</div>
+                                                </div>
+                                                <div class="col-auto ms-auto">
+                                                    {% comment %} Form for changing item quantity {% endcomment %}
+                                                    <div class="row">
+                                                        <div class="col-auto my-auto">
+                                                            <input class="p-2 ms-2 itemQuantity" type="number" name="quantity" min="1" max="{{cart_item.product.inventory}}" value="{{ cart_item.quantity }}" placeholder="quantity" size=6>
+                                                        </div>
+                                                        <div class="col-auto px-1 my-auto">
+                                                            <button class="btn btn-primary py-2 incQuantity" id="incQuantity">🡅</button>
+                                                        </div>
+                                                        <div class="col-auto px-1 my-auto">
+                                                            <button class="btn btn-secondary py-2 decQuantity" id="decQuantity">🡇</button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col p-2">Total: <b>{{ cart_item.getTotal }}</b></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% comment %} Delete item button {% endcomment %}
+                                        <div class="col-auto ms-2">
+                                            {% comment %} <a class="delItem" href="{% url 'delete_from_cart' cart_item.id %}" role="button"> {% endcomment %}
+                                            <a class="delItem" role="button">
+                                                <img src="{% get_media_prefix %}{{"Cancel_btn.png"}}" width="20px", height="20px">
+                                            </a>
+                                        </div>
+                                        
                                     </div>
-                                    <div class="col">
-                                        <div>Qty: </div>
-                                        <form action="{% url 'change_item_quantity' product_id=cart_item.id %}" method="get">
-                                            <input type="number" name="quantity" min="1" max="{{cart_item.product.inventory}}" value="{{ cart_item.quantity }}">
-                                            <input type="submit" value="Submit">
-                                        </form>
-                                    </div>
-                                    <div class="col">Total: {{ cart_item.totalPrice }}</div>
-                                    <div class="col">
-                                        <a href="{% url 'delete_from_cart' cart_item.id %}" role="button">
-                                            <img src="{% get_media_prefix %}{{"Cancel_btn.png"}}" width="20px", height="20px">
-                                        </a>
-                                    </div>
-                                    
                                 </div>
                             </div>
                         </div>
-                    </div>
-            {% endfor %}
+                {% endfor %}
+            {% else %}
+                <p>No products are in your cart.</p>
+            {% endif %}
         </div>
-        {% else %}
-            <p>No products are in your cart.</p>
-        {% endif %}
-    </div>
-    <div class="col-6">
-        <div class="listItem float-start rounded my-2 p-3">
-            <div>Total: £{{ cart.totalPrice }}</div>
-            <br>
-            <form action="{% url 'create_order_from_cart' %}" method="post">
-                {% csrf_token %}
-                <input type="hidden" name="cart_id" value="{{cart.id}}">
-                <button type="submit" value="Submit" class="w-100 btn btn-info" role="button"><h3>Checkout</h3></button>
-            </form>
+        <div class="col-4">
+            <div class="listItem float-start rounded my-2 p-3">
+                <div id="totalPrice">Total: £{{ cart.getTotal }}</div>
+                <br>
+                <form action="{% url 'create_order_from_cart' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="cart_id" value="{{cart.id}}">
+                    <button type="submit" value="Submit" class="w-100 btn btn-info" role="button"><h3>Checkout</h3></button>
+                </form>
+            </div>
         </div>
     </div>
 {% endblock content %}

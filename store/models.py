@@ -59,6 +59,15 @@ class Cart(models.Model):
     def getTotal(self):
         self.totalPrice = sum([x.getTotal() for x in self.cart_items.all()])
         return self.totalPrice
+    
+    def cartItemsToJSON(self):
+        newString = "{"
+        for item in self.cart_items.all():
+            newString += "{} : {{price: {}, quantity: {}}},".format(item.id, item.product.price, item.quantity)
+        newString = newString[0:-1]
+        newString += "}"
+
+        return newString
 
 class CartItem(models.Model):
     quantity = models.IntegerField()
@@ -77,11 +86,14 @@ class CartItem(models.Model):
         related_name="cart_items"
     )
 
-    totalPrice = None
+    # totalPrice = None
+    
+    # def getTotal(self):
+    #     self.totalPrice = self.quantity * self.product.price
+    #     return self.totalPrice
     
     def getTotal(self):
-        self.totalPrice = self.quantity * self.product.price
-        return self.totalPrice
+        return self.quantity * self.product.price
     
 class Order(models.Model):
     placed_at = models.DateField(auto_now_add=True, blank=True)

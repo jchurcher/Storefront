@@ -8,6 +8,7 @@
 
     {% load static %}
     <link rel="stylesheet" href="{% static 'store/style.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 </head>
 
 {% block navbar %}
@@ -31,7 +32,7 @@
     {% comment %} {% endif %} {% endcomment %}
 {% endblock banner %}
 
-<div class="row p-3">
+<div class="row mx-auto" style="max-width: 1400px">
     {% block content %}{% endblock content %}
 </div>
 
