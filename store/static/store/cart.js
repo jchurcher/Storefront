@@ -52,39 +52,45 @@ $(document).ready(function(){
         headers: { "X-CSRFToken": getCookie("csrftoken") },
     });
 
-    var clickId = 0;
+    var clickIds = {};
 
     // Increment quantity of item
     $(".incQuantity").click(function(){
-        inQuantity = $(this).parent().siblings().children(".itemQuantity")
+        var inQuantity = $(this).parent().siblings().children(".itemQuantity")
         inQuantity[0].stepUp()
 
-        clickId += 1;
-        var thisClickId = clickId
+        var productId = inQuantity.closest(".cartItem").attr("id").split("_").pop()
+
+        clickIds[productId] = new Date().getTime()
+        var thisClickId = clickIds[productId]
 
         // Sends post request 1 second after most recent inc/dec
         setTimeout(function() {
-            if(thisClickId < clickId){  // Only click if this is the most recent click
+            if(thisClickId != clickIds[productId]){  // Only click if this is the most recent click
                 return
             }
-            clickId = 0;
-            $.post("change_item_quantity/", data={"quantity": inQuantity.val(), "product_id": inQuantity.closest(".cartItem").attr("id").split("_").pop()}, callback=(data) => displayBanner(data))
+            delete clickIds[productId];
+            $.post("change_item_quantity/", data={"quantity": inQuantity.val(), "product_id": productId}, callback=(data) => displayBanner(data))
         }, 1000);
     })
     
     // Decrement quantity of item
     $(".decQuantity").click(function(){
-        inQuantity = $(this).parent().siblings().children(".itemQuantity")
+        var inQuantity = $(this).parent().siblings().children(".itemQuantity")
         inQuantity[0].stepDown()
 
-        clickId += 1;
-        var thisClickId = clickId
+        var productId = inQuantity.closest(".cartItem").attr("id").split("_").pop()
+
+        clickIds[productId] = new Date().getTime()
+        var thisClickId = clickIds[productId]
+
+        // Sends post request 1 second after most recent inc/dec
         setTimeout(function() {
-            if(thisClickId < clickId){
+            if(thisClickId != clickIds[productId]){  // Only click if this is the most recent click
                 return
             }
-            clickId = 0;
-            $.post("change_item_quantity/", data={"quantity": inQuantity.val(), "product_id": inQuantity.closest(".cartItem").attr("id").split("_").pop()}, callback=(data) => displayBanner(data))
+            delete clickIds[productId];
+            $.post("change_item_quantity/", data={"quantity": inQuantity.val(), "product_id": productId}, callback=(data) => displayBanner(data))
         }, 1000);
     })
 
