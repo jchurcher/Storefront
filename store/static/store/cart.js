@@ -63,25 +63,12 @@ $(document).ready(function(){
 
         clickIds[productId] = new Date().getTime()
         var thisClickId = clickIds[productId]
-<<<<<<< HEAD
 
         // Sends post request 1 second after most recent inc/dec
         setTimeout(function() {
             if(thisClickId != clickIds[productId]){  // Only click if this is the most recent click
                 return
             }
-=======
-
-        console.log("new timer:", thisClickId, "for", productId)
-
-        // Sends post request 1 second after most recent inc/dec
-        setTimeout(function() {
-            console.log("check timer: ", thisClickId, "for", productId, "against", clickIds[productId])
-            if(thisClickId != clickIds[productId]){  // Only click if this is the most recent click
-                return
-            }
-            console.log("send", thisClickId, "for", productId)
->>>>>>> 88e37fe6cb2314444fd707d96632822ae527d15c
             delete clickIds[productId];
             $.post("change_item_quantity/", data={"quantity": inQuantity.val(), "product_id": productId}, callback=(data) => displayBanner(data))
         }, 1000);
