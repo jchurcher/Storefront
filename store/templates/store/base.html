@@ -8,7 +8,9 @@
 
     {% load static %}
     <link rel="stylesheet" href="{% static 'store/style.css' %}">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    {% load static %}
+    <script src="{% static 'store/base.js' %}"></script>
 </head>
 
 {% block navbar %}
@@ -25,12 +27,16 @@
 {% endblock navbar %}
 
 {% block banner %}
-    {% comment %} {% if banner %} {% endcomment %}
+    {% comment %} {% if banner %}
         <div class="banner">
             {{ request.session.banner }}
         </div>
-    {% comment %} {% endif %} {% endcomment %}
+    {% endif %} {% endcomment %}
+    <div id="bannerSet">
+    </div>
 {% endblock banner %}
+
+<br>
 
 <div class="row mx-auto" style="max-width: 1400px">
     {% block content %}{% endblock content %}

@@ -1,35 +1,48 @@
 <!DOCTYPE html>
 {% extends 'store/base.html' %}
-{% comment %} {% block content %}
-    {% if object %}
-        {% for key,value in object_dict.items %}
-            {% if key == "title" %}
-                <h2>{{ value }}</h2>
-            {% else %}
-                <p>{{ key }} : {{ value }}</p>
-            {% endif %}
-        {% endfor %}
-    {% else %}
-        <p>This product does not exist.</p>
-    {% endif %}
-{% endblock %} {% endcomment %}
-
 {% block content %}
-    {% if object %}
+    {% load static %}
+    {% csrf_token %}
+    <script>
+        var productJS = "{{ product }}"
+    </script>
+    <script src="{% static 'store/product.js' %}"></script>
+
+    {% if product %}
         <div class="container">
             <div class="row justify-content-md-center">
-                <div class="col-md-auto">
-                    <img src="{{ object.photo.url }}" class="img-fluid" width="500", height="500">  
+                {% comment %} Image {% endcomment %}
+                <div class="col-auto">
+                    <img src="{{ product.photo.url }}" class="img-fluid img-detail">  
                 </div>
-                <div class="col-md-auto">
+                {% comment %} Info {% endcomment %}
+                <div class="col">
                     <div class="container">
+                        <div class="row">{{ product.title }}</div>
                         <div class="row">
-                            <div class="col"><h2>{{ object.title }}</h2></div>
-                            <div class="col"><a href="{% url 'add_to_cart' object.id %}" class="btn btn-info" role="button">Add to Cart</a></div>
+                            <div class="col p-0 heading">£{{ product.price }}</div>
+                            {% comment %} Add to cart and Change quantity form {% endcomment %}
+                            <div class="col p-0">
+                                <div class="row mx-0 h-100" style="display: grid">
+                                    <button class="btn btn-primary addToCartBtn" type="button">Add to Cart</button>
+                                </div>
+                                <div class="row mx-0 h-100 border rounded border-primary border-2 justify-content-center changeQuantityForm" style="display: none">
+                                    <div class="col-auto px-1 my-auto">
+                                        <input class="p-2 ms-2 itemQuantity" type="number" name="quantity" min="1" max="{{product.inventory}}" value="1" placeholder="quantity" size=10>
+                                    </div>
+                                    <div class="col-auto px-1 my-auto">
+                                        <button class="btn btn-primary py-2 incQuantity" id="incQuantity">🡅</button>
+                                    </div>
+                                    <div class="col-auto px-1 my-auto">
+                                        <button class="btn btn-secondary py-2 decQuantity" id="decQuantity">🡇</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="row"><p>£{{ object.price }}</h2></div>
-                        <div class="row"><p>{{ object.description }}</h2></div>
-                        <div class="row"><p>Only {{ object.inventory }} left!</h2></div>
+                        {% if product.inventory <= 20 %}
+                            <div class="row">There's only {{ product.inventory }} left in stock!</div>
+                        {% endif %}
+                        <div class="row">{{ product.description }}</div>
                     </div>
                 </div>
             </div>

@@ -3,7 +3,7 @@
 {% block content %}
     {% load static %}
     <script>
-        var cartJS = {{ cart.cartItemsToJSON }}
+        {% comment %} var cartJS = {{ cart.cartItemsToJSON }} {% endcomment %}
     </script>
     {% csrf_token %}
     <script src="{% static 'store/cart.js' %}"></script>
@@ -26,13 +26,13 @@
                                                 <div class="col-auto"><img src="{{ cart_item.product.photo.url }}" class="img-cart"></div>
                                                 <div class="col-auto">
                                                     <div class="row">{{ cart_item.product.title }}</div>
-                                                    <div class="row headding">£{{ cart_item.product.price }}</div>
+                                                    <div class="row heading">£{{ cart_item.product.price }}</div>
                                                 </div>
                                                 <div class="col-auto ms-auto">
                                                     {% comment %} Form for changing item quantity {% endcomment %}
                                                     <div class="row">
-                                                        <div class="col-auto my-auto">
-                                                            <input class="p-2 ms-2 itemQuantity" type="number" name="quantity" min="1" max="{{cart_item.product.inventory}}" value="{{ cart_item.quantity }}" placeholder="quantity" size=6>
+                                                        <div class="col-auto px-1 my-auto">
+                                                            <input class="p-2 ms-2 itemQuantity" type="number" name="quantity" min="1" max="{{cart_item.product.inventory}}" value="{{ cart_item.quantity }}" placeholder="quantity" size=10>
                                                         </div>
                                                         <div class="col-auto px-1 my-auto">
                                                             <button class="btn btn-primary py-2 incQuantity" id="incQuantity">🡅</button>
@@ -69,7 +69,7 @@
                 <form action="{% url 'create_order_from_cart' %}" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="cart_id" value="{{cart.id}}">
-                    <button type="submit" value="Submit" class="w-100 btn btn-info" role="button"><h3>Checkout</h3></button>
+                    <button type="submit" value="Submit" class="w-100 btn btn-info" role="button">Checkout</button>
                 </form>
             </div>
         </div>

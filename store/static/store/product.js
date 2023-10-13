@@ -1,7 +1,3 @@
-// function calc_total_price(quantity, price) {
-//     return quantity * price
-// }
-
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -19,40 +15,19 @@ function getCookie(name) {
 }
 const csrftoken = getCookie('csrftoken');
 
-function calculate_total_price(itemId) {
-    console.log(cartJS);
-
-    formElement = document.getElementById("quantity_"+itemId);
-    formElement.parentElement.submit();
-
-    var newQuantity = formElement.value;
-    console.log(newQuantity);
-
-    var total = 0;
-    for(item in cartJS) {
-        if(item == itemId) {
-            total += cartJS[item].price * newQuantity;
-            continue;
-        }
-
-        total += cartJS[item].price * cartJS[item].quantity;
-        console.log(cartJS[item].price)
-    }
-
-    total = total.toFixed(2);
-
-    var t = document.getElementById("totalPrice");
-    t.innerHTML = "Total: £"+total;
-
-    console.log(total);
-}
-
 $(document).ready(function(){
     $.ajaxSetup({
         headers: { "X-CSRFToken": getCookie("csrftoken") },
+        data: { "product_id": 1} // Change this so its the correct product id
     });
 
     var clickId = 0;
+
+    $(".addToCartBtn").click(function(){
+        $.post("add_to_cart/", data={"product_id": 1})
+        $(this).parent().hide()
+        $(".changeQuantityForm").show()
+    })
 
     // Increment quantity of item
     $(".incQuantity").click(function(){
@@ -102,13 +77,5 @@ $(document).ready(function(){
         }
         
         $.post("change_item_quantity/", data={"quantity": inQuantity.val(), "product_id": inQuantity.closest(".cartItem").attr("id").split("_").pop()}, callback=(data) => displayBanner(data))
-    })
-
-    $(".delItem").click(function(){
-        var product_id = $(this).closest(".cartItem").attr("id").split("_").pop()
-        $.post("delete_from_cart/", data={"product_id": product_id}, callback=(data) => {
-            $(this).closest(".cartItem").remove()
-            displayBanner(data)
-        })
     })
 });
