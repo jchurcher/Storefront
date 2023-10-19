@@ -24,9 +24,63 @@ This e-commerce web application is designed to allow visitors to browse a list o
 
 ### Prerequisites
 
+* Python
+
+This project requires Python3 which can be installed from their [website](https://www.python.org/). Install version ```3.10.7```, if installing another version be sure to check it is compatible.
+
+* SQLite3
+
+To install SQLite3 head to their website [here](https://www.sqlite.org/index.html) and follow the instructions to install version ```3.41.2```.
+
 ### Installation
 
+1. Clone this repository
+```powershell
+git clone https://github.com/jchurcher/Storefront.git
+```
+
+2. Create and activate a new Python virtual environment. Fill in \<path\> with the path location you would like to store your environments files (usually just env, venv, etc.).
+```powershell
+# Enter project
+cd Storefront/
+
+# Install virtual environment package
+pip install virtualenv
+
+# Make new virtual environment
+py -m venv <path>
+
+# Activate the environment
+<path>/Scripts/Activate
+```
+
+3. Install the required packages from the provided requirements.txt using pip
+```powershell
+pip install -r requirements.txt
+```
+
+4. Run the server
+```powershell
+# Run server
+py manage.py runserver localhost:8000
+
+# Server is now running on localhost:8000
+```
+
 ## Accessing the website
+
+To access the website got to ```localhost:8000``` in the browser, there are several URLs to access the app listed below:
+
+#### Homepage: [http://localhost:8000/store/](http://localhost:8000/store/)
+
+#### Products list: [http://localhost:8000/store/products/](http://localhost:8000/store/products/)
+
+#### Collections list: [http://localhost:8000/store/collections/](http://localhost:8000/store/collections/)
+
+#### Cart: [http://localhost:8000/store/cart/](http://localhost:8000/store/cart/)
+
+#### Product detail page: [http://localhost:8000/store/products/?/](http://localhost:8000/store/products/1/)
+The ```?``` refers to the product id that you are requesting the details for. This URL in particular, the id is set to 1 and will redirect you to that product.
 
 ## Running tests
 
