@@ -36,7 +36,7 @@ To install SQLite3 head to their website [here](https://www.sqlite.org/index.htm
 
 1. Clone this repository
 ```powershell
-git clone https://github.com/jchurcher/Storefront.git
+git clone "https://github.com/jchurcher/Storefront.git"
 ```
 
 2. Create and activate a new Python virtual environment. Fill in \<path\> with the path location you would like to store your environments files (usually just env, venv, etc.).
@@ -83,5 +83,18 @@ To access the website got to ```localhost:8000``` in the browser, there are seve
 The ```?``` refers to the product id that you are requesting the details for. This URL in particular, the id is set to 1 and will redirect you to that product.
 
 ## Running tests
+
+The tests written for this project use the ```Django.test``` library which is a subclass the standard Python library ```unittest```. To run these use the following command:
+
+```powershell
+py manage.py test
+
+# Use the test name to run that specific set of tests
+# Example below runs the 'CollectionIndexViewTest' class of tests
+py manage.py test store.tests.CollectionIndexViewTest
+
+# Use -v to change the verbosity (0,1,2,3)
+py manage.py test -v 3
+```
 
 ## Troubleshooting
