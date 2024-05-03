@@ -4,7 +4,10 @@
     {% load static %}
     {% csrf_token %}
     <script>
-        var productJS = "{{ product }}"
+        var contextProduct =  {
+            id: {{ product.id }},
+            title: "{{ product.title }}",
+        }
     </script>
     <script src="{% static 'store/product.js' %}"></script>
 

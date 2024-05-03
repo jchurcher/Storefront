@@ -70,7 +70,7 @@ $(document).ready(function(){
                 return
             }
             delete clickIds[productId];
-            $.post("change_item_quantity/", data={"quantity": inQuantity.val(), "product_id": productId}, callback=(data) => displayBanner(data))
+            $.post("/store/change_item_quantity/", data={"quantity": inQuantity.val(), "product_id": productId}, callback=(data) => displayBanner(data))
         }, 1000);
     })
     
@@ -90,7 +90,7 @@ $(document).ready(function(){
                 return
             }
             delete clickIds[productId];
-            $.post("change_item_quantity/", data={"quantity": inQuantity.val(), "product_id": productId}, callback=(data) => displayBanner(data))
+            $.post("/store/change_item_quantity/", data={"quantity": inQuantity.val(), "product_id": productId}, callback=(data) => displayBanner(data))
         }, 1000);
     })
 
@@ -107,12 +107,13 @@ $(document).ready(function(){
             return
         }
         
-        $.post("change_item_quantity/", data={"quantity": inQuantity.val(), "product_id": inQuantity.closest(".cartItem").attr("id").split("_").pop()}, callback=(data) => displayBanner(data))
+        $.post("/store/change_item_quantity/", data={"quantity": inQuantity.val(), "product_id": inQuantity.closest(".cartItem").attr("id").split("_").pop()}, callback=(data) => displayBanner(data))
     })
 
+    // Delete Item
     $(".delItem").click(function(){
         var product_id = $(this).closest(".cartItem").attr("id").split("_").pop()
-        $.post("delete_from_cart/", data={"product_id": product_id}, callback=(data) => {
+        $.post("/store/delete_from_cart/", data={"product_id": product_id}, callback=(data) => {
             $(this).closest(".cartItem").remove()
             displayBanner(data)
         })

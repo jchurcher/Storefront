@@ -18,13 +18,14 @@ const csrftoken = getCookie('csrftoken');
 $(document).ready(function(){
     $.ajaxSetup({
         headers: { "X-CSRFToken": getCookie("csrftoken") },
-        data: { "product_id": 1} // Change this so its the correct product id
+        data: { "product_id": contextProduct.id} // Change this so its the correct product id
     });
 
     var clickId = 0;
 
+    // Add to Cart
     $(".addToCartBtn").click(function(){
-        $.post("add_to_cart/", data={"product_id": 1})
+        $.post("/store/add_to_cart/")
         $(this).parent().hide()
         $(".changeQuantityForm").show()
     })
@@ -43,7 +44,7 @@ $(document).ready(function(){
                 return
             }
             clickId = 0;
-            $.post("change_item_quantity/", data={"quantity": inQuantity.val(), "product_id": inQuantity.closest(".cartItem").attr("id").split("_").pop()}, callback=(data) => displayBanner(data))
+            $.post("/store/change_item_quantity/", data={"quantity": inQuantity.val()}, callback=(data) => displayBanner(data))
         }, 1000);
     })
     
@@ -59,7 +60,7 @@ $(document).ready(function(){
                 return
             }
             clickId = 0;
-            $.post("change_item_quantity/", data={"quantity": inQuantity.val(), "product_id": inQuantity.closest(".cartItem").attr("id").split("_").pop()}, callback=(data) => displayBanner(data))
+            $.post("/store/change_item_quantity/", data={"quantity": inQuantity.val()}, callback=(data) => displayBanner(data))
         }, 1000);
     })
 
@@ -76,6 +77,6 @@ $(document).ready(function(){
             return
         }
         
-        $.post("change_item_quantity/", data={"quantity": inQuantity.val(), "product_id": inQuantity.closest(".cartItem").attr("id").split("_").pop()}, callback=(data) => displayBanner(data))
+        $.post("/store/change_item_quantity/", data={"quantity": inQuantity.val()}, callback=(data) => displayBanner(data))
     })
 });

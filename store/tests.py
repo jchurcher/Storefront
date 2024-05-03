@@ -166,3 +166,46 @@ class CollectionDetailViewTest(TestCase):
         self.assertTrue(response.context["object"])
         self.assertFalse(response.context["object"].featured_product)
         self.assertFalse(collection.featured_product)
+
+class CartDetailViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        # Create a product for testing
+        Product.objects.create(
+            title = "test product",
+            price = random.uniform(0, 20),
+            inventory = random.randrange(1, 20)
+        )
+
+    def test_view_url_exists_at_desired_location(self):
+        product = Product.objects.get(id=1)
+        response = self.client.get(f'/store/products/{product.id}/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_url_accessible_by_name(self):
+        product = Product.objects.get(id=1)
+        response = self.client.get(reverse('detail_products', args=[product.id]))
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_uses_correct_template(self):
+        product = Product.objects.get(id=1)
+        response = self.client.get(reverse('detail_products', args=[product.id]))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'store/product.html')
+
+    # Remove item from the cart through ajax
+    def test_add_product_to_cart_ajax(self):
+        product = Product.objects.get(id=1)
+        response = self.client.post(reverse('add_to_cart'), data={"product_id": product.id})
+        self.assertEqual(response.status_code, 200)
+
+    # Change quantity of an item in the cart through ajax
+    def test_change_product_quantity_in_cart_ajax(self):
+        product = Product.objects.get(id=1)
+        response = self.client.post(reverse('add_to_cart'), data={"product_id": product.id})
+        self.assertEqual(response.status_code, 200)
+
+        item = CartItem.objects.all()[0]
+        new_quantity = 10 if item.quantity != 10 else 8
+        response = self.client.post(reverse('change_item_quantity'), data={"product_id": product.id, "quantity": new_quantity})
+        self.assertEqual(response.status_code, 200)

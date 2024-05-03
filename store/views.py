@@ -36,9 +36,9 @@ class ProductDetailView(generic.DetailView):
     #     obj_dict = model_to_dict(context["object"], exclude="id")
     #     # context["object_dict"] = obj_dict
     #     return context
-    
 
     
+
 
 class CollectionIndexView(generic.ListView):
     model = Collection
@@ -57,7 +57,11 @@ class CollectionDetailView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         featured_product = context["object"].featured_product
-        context["object_list"] = context["object"].products.exclude(pk=featured_product.id)
+        if featured_product != None:
+            context["object_list"] = context["object"].products.exclude(pk=featured_product.id)
+        else:
+            context["object_list"] = context["object"].products.all()
+        
         context["detail_url"] = 'detail_products'
         return context
     
@@ -99,8 +103,13 @@ class CartIndexView(generic.ListView):
         return context
     
 
+#AJAX
+    
+# Adds an item to the cart by an id provided as a POST variable
+def add_to_cart(request, quantity=1):
+    if request.method == "POST":
+        product_id = request.POST.get("product_id")
 
-def add_to_cart(request, product_id, quantity=1):
     current_product = Product.objects.get(pk=product_id)
 
     if "cart" in request.session:
@@ -124,19 +133,9 @@ def add_to_cart(request, product_id, quantity=1):
 
     request.session["banner"] = str(quantity) + " " + current_product.title + " has been added to your cart"
 
-    return redirect("detail_products", product_id)
+    return HttpResponse("///Display this in banner (Added item to cart)///")
 
-# def delete_from_cart(request, product_id):
-#     current_cart = Cart.objects.get(pk = request.session["cart"])
-
-#     cart_item = CartItem.objects.get(pk = product_id, cart=current_cart)
-    
-#     cart_item.delete()
-
-#     request.session["banner"] = cart_item.product.title + " has been deleted from your cart"
-
-#     return redirect("index_cart_items")
-
+# Deletes and item from the cart by an id provided from a POST variable
 def delete_from_cart(request):
     if request.method == "POST":
         product_id = request.POST.get("product_id")
@@ -150,23 +149,7 @@ def delete_from_cart(request):
 
     return HttpResponse("///Display this in banner (Deleted cart item)///")
 
-# def change_item_quantity(request, product_id):
-#     if request.method == "GET":
-#         new_quantity = request.GET["quantity"]
-
-#     if request.method == "POST":
-#         new_quantity = request.POST["quantity"]
-
-#     current_cart = Cart.objects.get(pk = request.session["cart"])
-
-#     cart_item = CartItem.objects.get(pk = product_id, cart=current_cart)
-#     cart_item.quantity = new_quantity
-#     cart_item.save()
-
-#     request.session["banner"] = "Quantity of " + cart_item.product.title + " changed to " + new_quantity
-
-#     # return redirect("index_cart_items")
-
+# Changes the quantity of an item in the cart, item and quantity are provided as POST method variables
 def change_item_quantity(request):
     if request.method == "POST":
         new_quantity = request.POST["quantity"]

@@ -2,10 +2,12 @@
 {% extends 'store/index.html' %}
 {% block detailhead %}
     {% if object %}
-        <h2>{{ object.title }}</h2>
-        <div class="container d-flex flex-wrap">
-            <a class="listcol btn m-2" href="{% url detail_url object.featured_product.id %}">{{ object.featured_product.title }}</a>
-        </div>
+        {% if object.featured_product %}
+            <h2>{{ object.title }}</h2>
+            <div class="container d-flex flex-wrap">
+                <a class="listcol btn m-2" href="{% url detail_url object.featured_product.id %}">{{ object.featured_product.title }}</a>
+            </div>
+        {% endif %}
     {% else %}
         <p>This collection does not exist.</p>
     {% endif %}
