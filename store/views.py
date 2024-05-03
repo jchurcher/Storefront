@@ -115,7 +115,7 @@ def add_to_cart(request, quantity=1):
     if "cart" in request.session:
         current_cart = Cart.objects.get(pk = request.session["cart"])
     else:
-        current_cart = Cart()
+        current_cart = Cart.objects.create()
         request.session["cart"] = current_cart.id
 
     cart_items = current_cart.cart_items.filter(product=product_id)
