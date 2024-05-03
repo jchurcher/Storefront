@@ -81,7 +81,6 @@ class CartIndexView(generic.ListView):
             self.cart = Cart()
             self.cart.save()
             request.session["cart"] = self.cart.id
-        print("cart id:", self.cart.id)
         
         return super().dispatch(request, *args, **kwargs)
 
@@ -115,7 +114,7 @@ def add_to_cart(request, quantity=1):
     if "cart" in request.session:
         current_cart = Cart.objects.get(pk = request.session["cart"])
     else:
-        current_cart = Cart()
+        current_cart = Cart.objects.create()
         request.session["cart"] = current_cart.id
 
     cart_items = current_cart.cart_items.filter(product=product_id)
@@ -166,7 +165,6 @@ def change_item_quantity(request):
     return HttpResponse("///Display this in banner (Changed item quantity)///")
 
 def create_order_from_cart(request):
-    print("hello")
     if request.method != "POST":
         return None
     
