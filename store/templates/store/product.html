@@ -8,6 +8,12 @@
             id: {{ product.id }},
             title: "{{ product.title }}",
         }
+        
+        {% if cartItem == None %}
+            var contextCartItem = false;
+        {% else %}
+            var contextCartItem = true;
+        {% endif %}
     </script>
     <script src="{% static 'store/product.js' %}"></script>
 
@@ -31,7 +37,7 @@
                                 </div>
                                 <div class="row mx-0 h-100 border rounded border-primary border-2 justify-content-center changeQuantityForm" style="display: none">
                                     <div class="col-auto px-1 my-auto">
-                                        <input class="p-2 ms-2 itemQuantity" type="number" name="quantity" min="1" max="{{product.inventory}}" value="1" placeholder="quantity" size=10>
+                                        <input class="p-2 ms-2 itemQuantity" type="number" name="quantity" min="1" max="{{product.inventory}}" value={{ cartItem.quantity }} placeholder="quantity" size=10>
                                     </div>
                                     <div class="col-auto px-1 my-auto">
                                         <button class="btn btn-primary py-2 incQuantity" id="incQuantity">🡅</button>

@@ -31,11 +31,17 @@ class ProductDetailView(generic.DetailView):
     template_name = "store/product.html"
     context_object_name = "product"
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     obj_dict = model_to_dict(context["object"], exclude="id")
-    #     # context["object_dict"] = obj_dict
-    #     return context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        cart = Cart.objects.get_or_create(pk=self.request.session["cart"])[0]
+        try:
+            cartItem = cart.cart_items.get(product=context["product"])
+        except:
+            cartItem = None
+        context["cartItem"] = cartItem
+
+        return context
 
     
 

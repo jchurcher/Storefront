@@ -23,11 +23,21 @@ $(document).ready(function () {
 
     var clickId = 0;
 
+    // Hide add to cart and show inc/dec buttons
+    function ShowQuantityForm(){
+        $(".addToCartBtn").parent().hide();
+        $(".changeQuantityForm").show();
+    }
+
+    if ( contextCartItem ){
+        ShowQuantityForm();
+    }
+
     // Add to Cart
     $(".addToCartBtn").click(function () {
         $.post("/store/add_to_cart/");
-        $(this).parent().hide();
-        $(".changeQuantityForm").show();
+        $(".itemQuantity")[0].value = 1;
+        ShowQuantityForm();
     })
 
     // Increment quantity of item
